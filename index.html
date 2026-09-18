@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>ElderCare</title>
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+
+</head>
+
+<body>
+
+
+  <!-- ========================================= -->
+  <!-- HEADER -->
+  <!-- ========================================= -->
+
+  <header class="header">
+
+    <div class="header-content">
+
+      <div>
+
+        <h1>ElderCare</h1>
+
+        <p>
+          Smart Elderly Health Monitoring
+        </p>
+
+      </div>
+
+
+      <div class="connection-status">
+
+        <span
+          id="connectionDot"
+          class="status-dot offline"
+        ></span>
+
+        <span id="connectionText">
+          Connecting...
+        </span>
+
+      </div>
+
+    </div>
+
+  </header>
+
+
+
+  <!-- ========================================= -->
+  <!-- MAIN -->
+  <!-- ========================================= -->
+
+  <main class="container">
+
+
+    <!-- ======================================= -->
+    <!-- CARETAKER SETTINGS -->
+    <!-- ======================================= -->
+
+    <section class="card caretaker-card">
+
+      <div class="section-heading">
+
+        <h2>👤 Caretaker Settings</h2>
+
+        <p>
+          Set the caretaker's WhatsApp number to receive
+          emergency and medication reminders.
+        </p>
+
+      </div>
+
+
+      <div class="input-group">
+
+        <label for="caretakerPhone">
+          Caretaker WhatsApp Number
+        </label>
+
+        <input
+          type="tel"
+          id="caretakerPhone"
+          placeholder="60123456789"
+          autocomplete="tel"
+        >
+
+        <small>
+          Use international format without +, spaces or dashes.
+          Example: 60123456789
+        </small>
+
+      </div>
+
+
+      <button
+        id="saveCaretakerBtn"
+        class="primary-btn"
+      >
+        Save Caretaker
+      </button>
+
+
+      <div
+        id="caretakerMessage"
+        class="caretaker-message"
+      ></div>
+
+    </section>
+
+
+
+    <!-- ======================================= -->
+    <!-- MEDICATION REMINDER -->
+    <!-- ======================================= -->
+
+    <section class="card medication-card">
+
+      <div class="section-heading">
+
+        <h2>💊 Medication Reminder</h2>
+
+        <p>
+          Set a medication name and reminder time.
+          The caretaker will receive a WhatsApp reminder.
+        </p>
+
+      </div>
+
+
+      <div class="input-group">
+
+        <label for="medicineName">
+          Medicine Name
+        </label>
+
+        <input
+          type="text"
+          id="medicineName"
+          placeholder="e.g. Paracetamol"
+        >
+
+      </div>
+
+
+      <div class="input-group">
+
+        <label for="medicineTime">
+          Reminder Time
+        </label>
+
+        <input
+          type="time"
+          id="medicineTime"
+        >
+
+      </div>
+
+
+      <button
+        id="addReminderBtn"
+        class="primary-btn"
+      >
+        Add Reminder
+      </button>
+
+
+      <div
+        id="reminderMessage"
+        class="caretaker-message"
+      ></div>
+
+
+      <!-- CURRENT REMINDERS -->
+
+      <div class="reminder-section">
+
+        <h3>
+          Current Reminders
+        </h3>
+
+
+        <div
+          id="reminderList"
+          class="reminder-list"
+        >
+
+          <p class="empty">
+            No medication reminders yet.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ======================================= -->
+    <!-- CURRENT HEALTH -->
+    <!-- ======================================= -->
+
+    <section>
+
+      <div class="section-heading">
+
+        <h2>❤️ Current Health</h2>
+
+        <p>
+          Real-time health information from the ElderCare device.
+        </p>
+
+      </div>
+
+
+      <div class="health-grid">
+
+
+        <!-- HEART RATE -->
+
+        <div class="health-card">
+
+          <div class="health-icon">
+            ❤️
+          </div>
+
+          <div class="health-info">
+
+            <span class="health-label">
+              Heart Rate
+            </span>
+
+            <div class="health-value">
+
+              <span id="heartRate">
+                --
+              </span>
+
+              <span class="health-unit">
+                BPM
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- SPO2 -->
+
+        <div class="health-card">
+
+          <div class="health-icon">
+            🫁
+          </div>
+
+          <div class="health-info">
+
+            <span class="health-label">
+              SpO₂
+            </span>
+
+            <div class="health-value">
+
+              <span id="spo2">
+                --
+              </span>
+
+              <span class="health-unit">
+                %
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ======================================= -->
+    <!-- SAFETY STATUS -->
+    <!-- ======================================= -->
+
+    <section>
+
+      <div class="section-heading">
+
+        <h2>🚨 Safety Status</h2>
+
+        <p>
+          Fall detection status from the MPU6050 sensor.
+        </p>
+
+      </div>
+
+
+      <div
+        id="fallCard"
+        class="fall-card fall-normal"
+      >
+
+        <div class="fall-icon">
+          🛡️
+        </div>
+
+
+        <div class="fall-content">
+
+          <span class="fall-label">
+            Fall Detection
+          </span>
+
+          <strong
+            id="fallStatus"
+            class="fall-status normal"
+          >
+            --
+          </strong>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ======================================= -->
+    <!-- LAST UPDATED -->
+    <!-- ======================================= -->
+
+    <section class="card updated-card">
+
+      <div class="updated-icon">
+        🕐
+      </div>
+
+      <div>
+
+        <span class="updated-label">
+          Last Updated
+        </span>
+
+        <strong id="lastUpdated">
+          --
+        </strong>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ======================================= -->
+    <!-- DEVICE STATUS -->
+    <!-- ======================================= -->
+
+    <section>
+
+      <div class="section-heading">
+
+        <h2>🔧 Device Status</h2>
+
+        <p>
+          Current status of the monitoring sensors.
+        </p>
+
+      </div>
+
+
+      <div class="device-grid">
+
+
+        <div class="device-card">
+
+          <span class="device-name">
+            MPU6050
+          </span>
+
+          <strong id="mpuStatus">
+            --
+          </strong>
+
+        </div>
+
+
+        <div class="device-card">
+
+          <span class="device-name">
+            MAX30102
+          </span>
+
+          <strong id="max30102Status">
+            --
+          </strong>
+
+        </div>
+
+
+        <div class="device-card">
+
+          <span class="device-name">
+            Finger Detection
+          </span>
+
+          <strong id="fingerStatus">
+            --
+          </strong>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ======================================= -->
+    <!-- HEALTH HISTORY -->
+    <!-- ======================================= -->
+
+    <section>
+
+      <div class="history-header">
+
+        <div>
+
+          <h2>
+            📋 Health History
+          </h2>
+
+          <p>
+            Recent health monitoring records.
+          </p>
+
+        </div>
+
+
+        <button
+          id="refreshBtn"
+          class="refresh-btn"
+        >
+          ↻ Refresh
+        </button>
+
+      </div>
+
+
+      <div
+        id="historyList"
+        class="history-list"
+      >
+
+        <p class="empty">
+          Loading history...
+        </p>
+
+      </div>
+
+    </section>
+
+
+  </main>
+
+
+
+  <!-- ========================================= -->
+  <!-- FOOTER -->
+  <!-- ========================================= -->
+
+  <footer class="footer">
+
+    <p>
+      ElderCare IoT Monitoring System
+    </p>
+
+    <span>
+      ESP32 • Firebase • Twilio WhatsApp
+    </span>
+
+  </footer>
+
+
+
+  <!-- ========================================= -->
+  <!-- JAVASCRIPT -->
+  <!-- ========================================= -->
+
+  <script
+    type="module"
+    src="app.js"
+  ></script>
+
+</body>
+
+</html>
