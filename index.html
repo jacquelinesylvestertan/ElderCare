@@ -512,6 +512,16 @@
     src="app.js"
   ></script>
 
+  <script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./sw.js")
+        .then(() => console.log("ElderCare PWA ready!"))
+        .catch(error => console.error("PWA error:", error));
+    });
+  }
+</script>
+
 </body>
 
 </html>
