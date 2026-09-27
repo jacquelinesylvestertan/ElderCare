@@ -14,9 +14,20 @@
 
   <link
     rel="stylesheet"
-    href="style.css"
+    href="./style.css"
   >
-<link rel="manifest" href="./manifest.json">
+
+  <!-- PWA Manifest -->
+  <link
+    rel="manifest"
+    href="./manifest.json"
+  >
+
+  <meta
+    name="theme-color"
+    content="#6a4c93"
+  >
+
 </head>
 
 <body>
@@ -392,9 +403,7 @@
       <div class="device-grid">
 
 
-        <!-- =================================== -->
         <!-- WIFI -->
-        <!-- =================================== -->
 
         <div class="device-card">
 
@@ -410,9 +419,7 @@
 
 
 
-        <!-- =================================== -->
         <!-- MPU6050 -->
-        <!-- =================================== -->
 
         <div class="device-card">
 
@@ -428,9 +435,7 @@
 
 
 
-        <!-- =================================== -->
         <!-- MAX30102 -->
-        <!-- =================================== -->
 
         <div class="device-card">
 
@@ -446,9 +451,7 @@
 
 
 
-        <!-- =================================== -->
         <!-- FINGER DETECTION -->
-        <!-- =================================== -->
 
         <div class="device-card">
 
@@ -541,8 +544,46 @@
 
   <script
     type="module"
-    src="app.js"
+    src="./app.js"
   ></script>
+
+
+  <!-- ========================================= -->
+  <!-- SERVICE WORKER -->
+  <!-- ========================================= -->
+
+  <script>
+
+    if ("serviceWorker" in navigator) {
+
+      window.addEventListener("load", () => {
+
+        navigator.serviceWorker.register("./sw.js")
+
+          .then(registration => {
+
+            console.log(
+              "[SW] Registered:",
+              registration.scope
+            );
+
+          })
+
+          .catch(error => {
+
+            console.error(
+              "[SW] Registration failed:",
+              error
+            );
+
+          });
+
+      });
+
+    }
+
+  </script>
+
 
 </body>
 
