@@ -58,6 +58,10 @@ const historyRef = ref(db, "ElderCare/history");
 // ================================
 
 let pushoverFallSent = false;
+let pushoverFallSending = false;
+let pushoverRetryCount = 0;
+const maxPushoverRetries = 3;
+const pushoverRetryDelay = 5000;
 
 
 // ================================
@@ -254,6 +258,99 @@ async function sendPushover(
     }
 }
 
+// ==================================================
+// PUSHOVER FALL NOTIFICATION WITH RETRY
+// ==================================================
+
+async function sendFallPushoverWithRetry() {
+
+    if (pushoverFallSent) {
+        return;
+    }
+
+
+    if (
+        pushoverRetryCount >=
+        maxPushoverRetries
+    ) {
+
+        console.error(
+            "❌ Pushover: Maximum retry attempts reached."
+        );
+
+        pushoverFallSending = false;
+
+        return;
+    }
+
+
+    pushoverRetryCount++;
+
+
+    console.log(
+        "Pushover attempt " +
+        pushoverRetryCount +
+        "/" +
+        maxPushoverRetries
+    );
+
+
+    const success =
+        await sendPushover(
+            "🚨 ElderCare Fall Alert",
+            "FALL DETECTED! Please check the elderly person immediately."
+        );
+
+
+    if (success) {
+
+        pushoverFallSent = true;
+
+        pushoverFallSending = false;
+
+        console.log(
+            "✅ Pushover notification sent successfully."
+        );
+
+        return;
+    }
+
+
+    console.error(
+        "❌ Pushover attempt " +
+        pushoverRetryCount +
+        " failed."
+    );
+
+
+    if (
+        pushoverRetryCount <
+        maxPushoverRetries
+    ) {
+
+        console.log(
+            "Retrying Pushover in 5 seconds..."
+        );
+
+
+        setTimeout(
+            () => {
+
+                sendFallPushoverWithRetry();
+
+            },
+            pushoverRetryDelay
+        );
+
+    } else {
+
+        console.error(
+            "❌ Pushover failed after maximum attempts."
+        );
+
+        pushoverFallSending = false;
+    }
+}
 
 // ==================================================
 // FIREBASE CONNECTION STATUS
@@ -471,6 +568,10 @@ onValue(
             //         );
             //     }
             // }
+            // ==========================================
+            // PUSHOVER FALL NOTIFICATION
+            // ==========================================
+
             if (
                 status === "FALL DETECTED"
             ) {
@@ -484,23 +585,24 @@ onValue(
 
 
                 // ==========================================
-                // PUSHOVER FALL NOTIFICATION
+                // PUSHOVER FALL NOTIFICATION WITH RETRY
                 // ==========================================
 
-                if (!pushoverFallSent) {
+                if (
+                    !pushoverFallSent &&
+                    !pushoverFallSending
+                ) {
 
-                    pushoverFallSent = true;
+                    pushoverFallSending = true;
 
-
-                    sendPushover(
-                        "🚨 ElderCare Fall Alert",
-                        "FALL DETECTED! Please check the elderly person immediately."
-                    );
-
+                    pushoverRetryCount = 0;
 
                     console.log(
-                        "Pushover fall notification sent."
+                        "🚨 Fall detected. Starting Pushover notification..."
                     );
+
+
+                    sendFallPushoverWithRetry();
                 }
 
 
@@ -514,10 +616,15 @@ onValue(
                 }
 
 
-                // Reset notification
-                // when fall status returns to normal
+                // ==========================================
+                // RESET PUSHOVER
+                // ==========================================
 
                 pushoverFallSent = false;
+
+                pushoverFallSending = false;
+
+                pushoverRetryCount = 0;
             }
         }
 
