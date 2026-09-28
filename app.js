@@ -53,6 +53,12 @@ const db = getDatabase(app);
 const currentRef = ref(db, "ElderCare/current");
 const historyRef = ref(db, "ElderCare/history");
 
+// ================================
+// Pushover Fall Notification
+// ================================
+
+let pushoverFallSent = false;
+
 
 // ================================
 // DOM Elements
@@ -445,6 +451,26 @@ onValue(
                 status;
 
 
+            // if (
+            //     status === "FALL DETECTED"
+            // ) {
+
+            //     if (fallCard) {
+
+            //         fallCard.classList.add(
+            //             "danger"
+            //         );
+            //     }
+
+            // } else {
+
+            //     if (fallCard) {
+
+            //         fallCard.classList.remove(
+            //             "danger"
+            //         );
+            //     }
+            // }
             if (
                 status === "FALL DETECTED"
             ) {
@@ -456,6 +482,28 @@ onValue(
                     );
                 }
 
+
+                // ==========================================
+                // PUSHOVER FALL NOTIFICATION
+                // ==========================================
+
+                if (!pushoverFallSent) {
+
+                    pushoverFallSent = true;
+
+
+                    sendPushover(
+                        "🚨 ElderCare Fall Alert",
+                        "FALL DETECTED! Please check the elderly person immediately."
+                    );
+
+
+                    console.log(
+                        "Pushover fall notification sent."
+                    );
+                }
+
+
             } else {
 
                 if (fallCard) {
@@ -464,6 +512,12 @@ onValue(
                         "danger"
                     );
                 }
+
+
+                // Reset notification
+                // when fall status returns to normal
+
+                pushoverFallSent = false;
             }
         }
 
@@ -1305,10 +1359,10 @@ loadHistory();
 // PUSHOVER TEST
 // ==================================================
 
-sendPushover(
-    "ElderCare Test",
-    "Hei, saya jatuh, tolong"
-);
+// sendPushover(
+//     "ElderCare Test",
+//     "Hei, saya jatuh, tolong"
+// );
 
 
 // ==================================================
