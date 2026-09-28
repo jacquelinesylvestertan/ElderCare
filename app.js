@@ -1307,7 +1307,7 @@ loadHistory();
 
 sendPushover(
     "ElderCare Test",
-    "Hello! This is a test notification from ElderCare."
+    "Hei, saya jatuh, tolong"
 );
 
 
